@@ -28,19 +28,25 @@ const dates = [
   ['17.02.2024', '17.02.2025'],
 ];
 
+const MILLISECONDS_IN_A_SECOND = 1000;
+const SECONDS_IN_AN_HOUR = 3600;
+const HOURS_IN_A_DAY = 24;
+const DAYS_IN_A_YEAR = 365.25;
+const DAYS_IN_A_MONTH = 30;
+
 function outputDate(dates) {
   const startDateArray = dates[0].split('.');
   const endDateArray = dates[1].split('.');
 
-  let startDate = new Date(startDateArray[2], startDateArray[1] - 1, startDateArray[0]);
-  let endDate = new Date(endDateArray[2], endDateArray[1] - 1, endDateArray[0]);
+  const startDate = new Date(startDateArray[2], startDateArray[1] - 1, startDateArray[0]);
+  const endDate = new Date(endDateArray[2], endDateArray[1] - 1, endDateArray[0]);
 
-  let diffInMilliseconds = endDate.getTime() - startDate.getTime();
-  let diffInDays = diffInMilliseconds / (1000 * 3600 * 24);
+  const diffInMilliseconds = endDate.getTime() - startDate.getTime();
+  const diffInDays = diffInMilliseconds / (MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR * HOURS_IN_A_DAY);
 
-  let years = Math.floor(diffInDays / 365.25);
-  let remainingDays = diffInDays % 365.25;
-  let months = Math.floor(remainingDays / 30);
+  const years = Math.floor(diffInDays / DAYS_IN_A_YEAR);
+  const remainingDays = diffInDays % DAYS_IN_A_YEAR;
+  const months = Math.floor(remainingDays / DAYS_IN_A_MONTH);
 
   if (months === 12) {
     years++;
