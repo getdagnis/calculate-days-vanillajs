@@ -44,9 +44,9 @@ function outputDate(dates) {
   const diffInMilliseconds = endDate.getTime() - startDate.getTime();
   const diffInDays = diffInMilliseconds / (MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR * HOURS_IN_A_DAY);
 
-  const years = Math.floor(diffInDays / DAYS_IN_A_YEAR);
   const remainingDays = diffInDays % DAYS_IN_A_YEAR;
-  const months = Math.floor(remainingDays / DAYS_IN_A_MONTH);
+  let years = Math.floor(diffInDays / DAYS_IN_A_YEAR);
+  let months = Math.floor(remainingDays / DAYS_IN_A_MONTH);
 
   if (months === 12) {
     years++;
