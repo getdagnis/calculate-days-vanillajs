@@ -28,19 +28,16 @@ const dates = [
   ['17.02.2024', '17.02.2025'],
 ];
 
-const MILLISECONDS_IN_A_SECOND = 1000;
-const SECONDS_IN_AN_HOUR = 3600;
-const HOURS_IN_A_DAY = 24;
+const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
 function outputDate(dates) {
   const startDateArray = dates[0].split('.');
   const endDateArray = dates[1].split('.');
-
   const startDate = new Date(startDateArray[2], startDateArray[1] - 1, startDateArray[0]);
   const endDate = new Date(endDateArray[2], endDateArray[1] - 1, endDateArray[0]);
 
   const diffInMilliseconds = endDate.getTime() - startDate.getTime();
-  const diffInDays = diffInMilliseconds / (MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR * HOURS_IN_A_DAY);
+  const diffInDays = diffInMilliseconds / MILLISECONDS_IN_A_DAY;
 
   const totalMonths = calculateMonths(startDate, endDate);
   const years = Math.floor(totalMonths / 12);
@@ -58,6 +55,9 @@ function outputDate(dates) {
   return result;
 }
 
+// This function helps avoid issues with months and years having different number of days
+// It calculates the number of months between two dates and provides a way to calculate years from that
+// Instead of getting it by dividing the amount of days, which is not always reliable
 const calculateMonths = (startDate, endDate) => {
   const startYear = startDate.getFullYear();
   const endYear = endDate.getFullYear();
