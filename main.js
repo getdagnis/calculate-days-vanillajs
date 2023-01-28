@@ -36,8 +36,7 @@ function outputDate(dates) {
   const startDate = new Date(startDateArray[2], startDateArray[1] - 1, startDateArray[0]);
   const endDate = new Date(endDateArray[2], endDateArray[1] - 1, endDateArray[0]);
 
-  const diffInMilliseconds = endDate.getTime() - startDate.getTime();
-  const diffInDays = diffInMilliseconds / MILLISECONDS_IN_A_DAY;
+  const diffInDays = (endDate.getTime() - startDate.getTime()) / MILLISECONDS_IN_A_DAY;
 
   const totalMonths = calculateMonths(startDate, endDate);
   const years = Math.floor(totalMonths / 12);
@@ -61,16 +60,10 @@ function outputDate(dates) {
 const calculateMonths = (startDate, endDate) => {
   const startYear = startDate.getFullYear();
   const endYear = endDate.getFullYear();
-  const startDay = startDate.getDate();
-  const endDay = endDate.getDate();
-  const startMonth = startDate.getMonth();
-  const endMonth = endDate.getMonth();
+  let periodMonths = endDate.getMonth() - startDate.getMonth();
 
-  let periodMonths = 0;
-  if (endDay >= startDay) {
-    periodMonths += endMonth - startMonth;
-  } else {
-    periodMonths += endMonth - startMonth - 1;
+  if (endDate.getDate() < startDate.getDate()) {
+    periodMonths += -1;
   }
   if (endYear > startYear) {
     periodMonths += 12 * (endYear - startYear);
