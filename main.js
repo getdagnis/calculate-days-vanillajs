@@ -62,7 +62,7 @@ const calculateMonths = (startDate, endDate) => {
   const endYear = endDate.getFullYear();
   let periodMonths = endDate.getMonth() - startDate.getMonth();
 
-  if (endDate.getDate() < startDate.getDate()) {
+  if (startDate.getDate() > endDate.getDate()) {
     periodMonths += -1;
   }
   if (endYear > startYear) {
