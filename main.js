@@ -31,8 +31,6 @@ const dates = [
 const MILLISECONDS_IN_A_SECOND = 1000;
 const SECONDS_IN_AN_HOUR = 3600;
 const HOURS_IN_A_DAY = 24;
-const DAYS_IN_A_YEAR = 365.25;
-const DAYS_IN_A_MONTH = 30;
 
 function outputDate(dates) {
   const startDateArray = dates[0].split('.');
@@ -44,18 +42,9 @@ function outputDate(dates) {
   const diffInMilliseconds = endDate.getTime() - startDate.getTime();
   const diffInDays = diffInMilliseconds / (MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR * HOURS_IN_A_DAY);
 
-  const remainingDays = diffInDays % DAYS_IN_A_YEAR;
-  let years = Math.floor(diffInDays / DAYS_IN_A_YEAR);
-  let months = Math.floor(remainingDays / DAYS_IN_A_MONTH);
-
-  if (months === 12) {
-    years++;
-    months = 0;
-  }
-
-  if (diffInDays === 30) {
-    months = 0;
-  }
+  const totalMonths = calculateMonths(startDate, endDate);
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
 
   let result = '';
   if (years > 0) {
@@ -69,64 +58,23 @@ function outputDate(dates) {
   return result;
 }
 
-// This function shows incorrect output for some results, however, it is a more precise solution
-// as it takes into account the number of days in each month and year. Written with the help of AI
-function outputDatePrecise(dates) {
-  let date1Arr = dates[0].split('.');
-  let date2Arr = dates[1].split('.');
+const calculateMonths = (startDate, endDate) => {
+  const startYear = startDate.getFullYear();
+  const endYear = endDate.getFullYear();
+  const startDay = startDate.getDate();
+  const endDay = endDate.getDate();
+  const startMonth = startDate.getMonth();
+  const endMonth = endDate.getMonth();
 
-  let startYear = parseInt(date1Arr[2]);
-  let startMonth = parseInt(date1Arr[1]);
-  let startDay = parseInt(date1Arr[0]);
-
-  let endYear = parseInt(date2Arr[2]);
-  let endMonth = parseInt(date2Arr[1]);
-  let endDay = parseInt(date2Arr[0]);
-
-  let years = endYear - startYear;
-  let months = endMonth - startMonth;
-  let days = endDay - startDay;
-
-  if (days < 0) {
-    months--;
-    days += daysInMonth(startMonth, startYear);
+  let periodMonths = 0;
+  if (endDay >= startDay) {
+    periodMonths += endMonth - startMonth;
+  } else {
+    periodMonths += endMonth - startMonth - 1;
   }
-  if (months < 0) {
-    years--;
-    months += 12;
+  if (endYear > startYear) {
+    periodMonths += 12 * (endYear - startYear);
   }
 
-  let result = '';
-  if (years > 0) {
-    result += years + ' year' + (years > 1 ? 's' : '') + ', ';
-  }
-  if (months > 0) {
-    result += months + ' month' + (months > 1 ? 's' : '') + ', ';
-  }
-  result += 'total ' + (days + daysInYear(years) + daysInMonths(months)) + ' days';
-  return result;
-}
-
-function daysInMonth(month, year) {
-  return new Date(year, month, 0).getDate();
-}
-
-function daysInYear(years) {
-  let days = 0;
-  for (let i = 0; i < years; i++) {
-    days += isLeapYear(i) ? 366 : 365;
-  }
-  return days;
-}
-
-function daysInMonths(months) {
-  let days = 0;
-  for (let i = 0; i < months; i++) {
-    days += daysInMonth(i, 0);
-  }
-  return days;
-}
-
-function isLeapYear(year) {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
+  return periodMonths;
+};
